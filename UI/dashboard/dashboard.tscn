@@ -1,0 +1,126 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/dashboard/dashboard.gd" id="1_dashboard"]
+
+[node name="Dashboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dashboard")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="DatePanel" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DateTitle" type="Label" parent="MarginContainer/VBoxContainer/DatePanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Date"
+horizontal_alignment = 1
+
+[node name="DateGrid" type="GridContainer" parent="MarginContainer/VBoxContainer/DatePanel"]
+layout_mode = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="DayHeader" type="Label" parent="MarginContainer/VBoxContainer/DatePanel/DateGrid"]
+layout_mode = 2
+text = "Day"
+horizontal_alignment = 1
+
+[node name="MonthHeader" type="Label" parent="MarginContainer/VBoxContainer/DatePanel/DateGrid"]
+layout_mode = 2
+text = "Month"
+horizontal_alignment = 1
+
+[node name="YearHeader" type="Label" parent="MarginContainer/VBoxContainer/DatePanel/DateGrid"]
+layout_mode = 2
+text = "Year"
+horizontal_alignment = 1
+
+[node name="DayValue" type="Label" parent="MarginContainer/VBoxContainer/DatePanel/DateGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "1"
+horizontal_alignment = 1
+
+[node name="MonthValue" type="Label" parent="MarginContainer/VBoxContainer/DatePanel/DateGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "1"
+horizontal_alignment = 1
+
+[node name="YearValue" type="Label" parent="MarginContainer/VBoxContainer/DatePanel/DateGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "1"
+horizontal_alignment = 1
+
+[node name="TransportPanel" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer/TransportPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Play"
+
+[node name="PauseButton" type="Button" parent="MarginContainer/VBoxContainer/TransportPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Pause"
+
+[node name="SpeedPanel" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="SpeedX1" type="Button" parent="MarginContainer/VBoxContainer/SpeedPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "x1"
+
+[node name="SpeedX2" type="Button" parent="MarginContainer/VBoxContainer/SpeedPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "x2"
+
+[node name="SpeedX5" type="Button" parent="MarginContainer/VBoxContainer/SpeedPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "x5"
