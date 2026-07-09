@@ -1,0 +1,106 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://UI/delivery_result/delivery_result.gd" id="1_delivery_result"]
+
+[node name="DeliveryResult" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_delivery_result")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Delivery Result"
+horizontal_alignment = 1
+
+[node name="ResultPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ResultMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ResultPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="ResultGrid" type="GridContainer" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="OrdersDeliveredLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+layout_mode = 2
+text = "Orders delivered"
+
+[node name="OrdersDeliveredValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="BasePayLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+layout_mode = 2
+text = "Base pay total"
+
+[node name="BasePayValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "€0"
+
+[node name="TipTotalLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+layout_mode = 2
+text = "Tip total"
+
+[node name="TipTotalValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "€0"
+
+[node name="TotalEarnedLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+layout_mode = 2
+text = "Total earned"
+
+[node name="TotalEarnedValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "€0"
+
+[node name="RouteTimeLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+layout_mode = 2
+text = "Estimated route time"
+
+[node name="RouteTimeValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0 minutes"
+
+[node name="SatisfactionLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+layout_mode = 2
+text = "Customer satisfaction"
+
+[node name="SatisfactionValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Bad"

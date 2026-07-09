@@ -34,6 +34,11 @@ func mortgage_house() -> void:
 	changed.emit()
 
 
+func add_cash(amount: int) -> void:
+	cash += amount
+	changed.emit()
+
+
 func _on_day_advanced(_day: int, _month: int, _year: int) -> void:
 	var daily_cost := FOOD_COST_PER_DAY + UTILITIES_COST_PER_DAY
 	if owns_car:

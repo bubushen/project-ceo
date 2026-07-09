@@ -1,12 +1,19 @@
 extends Control
 ## Native visual city map with route-building overlays.
 
+signal delivery_completed(result: Dictionary)
+
 const GRID_COLUMNS := 10
 const GRID_ROWS := 10
 const GRID_ORIGIN := Vector2(24, 36)
 const GRID_SPACING := Vector2(29, 34)
 const PIZZERIA_POSITION := Vector2(52, 70)
 const START_NODE_ID := "Node 2-2"
+const BASE_PAY_PER_ORDER := 6
+const BASE_SEGMENT_TIME := 4.0
+const TRAFFIC_LOW_MULTIPLIER := 1.0
+const TRAFFIC_MEDIUM_MULTIPLIER := 1.5
+const TRAFFIC_HIGH_MULTIPLIER := 2.0
 
 const TRAFFIC_LOW := Color(0.12, 0.75, 0.26, 1.0)
 const TRAFFIC_MEDIUM := Color(0.95, 0.78, 0.16, 1.0)
@@ -28,10 +35,13 @@ const CUSTOMER_LOCATIONS := {
 @onready var _order_marker_layer: Control = %OrderMarkerLayer
 @onready var _route_label: Label = %RouteValue
 @onready var _clear_route_button: Button = %ClearRouteButton
+@onready var _confirm_route_button: Button = %ConfirmRouteButton
 
 var _node_buttons: Dictionary = {}
 var _node_positions: Dictionary = {}
 var _node_adjacency: Dictionary = {}
+var _node_traffic_multipliers: Dictionary = {}
+var _selected_orders: Array = []
 var _selected_route_nodes: Array[String] = []
 
 
@@ -39,31 +49,36 @@ func _ready() -> void:
 	_build_road_network()
 	_build_node_grid()
 	_clear_route_button.pressed.connect(_on_clear_route_pressed)
+	_confirm_route_button.pressed.connect(_on_confirm_route_pressed)
 	_refresh_route_display()
 
 
 func show_orders(selected_orders: Array) -> void:
+	_selected_orders = selected_orders.duplicate()
 	_clear_order_markers()
 	_clear_route()
 
 	var district_counts: Dictionary = {}
 	for order in selected_orders:
 		if order is Dictionary:
-			_add_order_marker(order, district_counts)
+			var order_data: Dictionary = order as Dictionary
+			_add_order_marker(order_data, district_counts)
 
 
 func _build_road_network() -> void:
 	for y in range(GRID_ROWS):
 		for x in range(GRID_COLUMNS - 1):
 			if _has_horizontal_road(x, y):
-				_add_road_segment(_node_position(x, y), _node_position(x + 1, y), _traffic_color(x, y))
-				_add_road_connection(_node_id(x, y), _node_id(x + 1, y))
+				var horizontal_traffic := _traffic_color(x, y)
+				_add_road_segment(_node_position(x, y), _node_position(x + 1, y), horizontal_traffic)
+				_add_road_connection(_node_id(x, y), _node_id(x + 1, y), _traffic_multiplier(horizontal_traffic))
 
 	for y in range(GRID_ROWS - 1):
 		for x in range(GRID_COLUMNS):
 			if _has_vertical_road(x, y):
-				_add_road_segment(_node_position(x, y), _node_position(x, y + 1), _traffic_color(x, y))
-				_add_road_connection(_node_id(x, y), _node_id(x, y + 1))
+				var vertical_traffic := _traffic_color(x, y)
+				_add_road_segment(_node_position(x, y), _node_position(x, y + 1), vertical_traffic)
+				_add_road_connection(_node_id(x, y), _node_id(x, y + 1), _traffic_multiplier(vertical_traffic))
 
 
 func _build_node_grid() -> void:
@@ -89,7 +104,7 @@ func _add_road_segment(start: Vector2, end: Vector2, color: Color) -> void:
 	_road_layer.add_child(road)
 
 
-func _add_road_connection(from_node: String, to_node: String) -> void:
+func _add_road_connection(from_node: String, to_node: String, traffic_multiplier: float) -> void:
 	if not _node_adjacency.has(from_node):
 		_node_adjacency[from_node] = []
 	if not _node_adjacency.has(to_node):
@@ -97,6 +112,7 @@ func _add_road_connection(from_node: String, to_node: String) -> void:
 
 	_node_adjacency[from_node].append(to_node)
 	_node_adjacency[to_node].append(from_node)
+	_node_traffic_multipliers[_connection_key(from_node, to_node)] = traffic_multiplier
 
 
 func _has_horizontal_road(x: int, y: int) -> bool:
@@ -117,6 +133,20 @@ func _traffic_color(x: int, y: int) -> Color:
 	if x in [1, 4] or y in [0, 3]:
 		return TRAFFIC_MEDIUM
 	return TRAFFIC_LOW
+
+
+func _traffic_multiplier(traffic_color: Color) -> float:
+	if traffic_color == TRAFFIC_HIGH:
+		return TRAFFIC_HIGH_MULTIPLIER
+	if traffic_color == TRAFFIC_MEDIUM:
+		return TRAFFIC_MEDIUM_MULTIPLIER
+	return TRAFFIC_LOW_MULTIPLIER
+
+
+func _connection_key(from_node: String, to_node: String) -> String:
+	if from_node < to_node:
+		return "%s|%s" % [from_node, to_node]
+	return "%s|%s" % [to_node, from_node]
 
 
 func _node_position(x: int, y: int) -> Vector2:
@@ -177,6 +207,15 @@ func _on_clear_route_pressed() -> void:
 	_clear_route()
 
 
+func _on_confirm_route_pressed() -> void:
+	if _selected_route_nodes.is_empty() or _selected_orders.is_empty():
+		return
+
+	var result: Dictionary = _calculate_delivery_result()
+	Player.add_cash(int(result["total_earned"]))
+	delivery_completed.emit(result)
+
+
 func _clear_route() -> void:
 	_selected_route_nodes.clear()
 	for node_id in _node_buttons:
@@ -212,3 +251,70 @@ func _refresh_route_display() -> void:
 		route_text += " -> " + node_id
 
 	_route_label.text = route_text + " -> Customer"
+
+
+func _calculate_delivery_result() -> Dictionary:
+	var route_time := _calculate_route_time()
+	var base_pay_total := _selected_orders.size() * BASE_PAY_PER_ORDER
+	var tip_total := 0
+
+	for order in _selected_orders:
+		if order is Dictionary:
+			var order_data: Dictionary = order as Dictionary
+			tip_total += _calculate_tip(order_data, route_time)
+
+	var total_earned := base_pay_total + tip_total
+	return {
+		"orders_delivered": _selected_orders.size(),
+		"base_pay_total": base_pay_total,
+		"tip_total": tip_total,
+		"total_earned": total_earned,
+		"route_time": route_time,
+		"customer_satisfaction": _customer_satisfaction(route_time),
+	}
+
+
+func _calculate_route_time() -> float:
+	var route_time := 0.0
+	if _selected_route_nodes.size() <= 1:
+		return route_time
+
+	for index in range(_selected_route_nodes.size() - 1):
+		var from_node: String = _selected_route_nodes[index]
+		var to_node: String = _selected_route_nodes[index + 1]
+		var traffic_multiplier := float(_node_traffic_multipliers.get(_connection_key(from_node, to_node), TRAFFIC_LOW_MULTIPLIER))
+		route_time += BASE_SEGMENT_TIME * traffic_multiplier
+
+	return route_time
+
+
+func _calculate_tip(order: Dictionary, route_time: float) -> int:
+	var potential_tip := int(order.get("potential_tip", 0))
+	var max_delivery_time := float(order.get("max_delivery_time", 0))
+	if route_time <= max_delivery_time:
+		return potential_tip
+	if route_time <= max_delivery_time * 1.25:
+		return int(potential_tip / 2)
+	return 0
+
+
+func _customer_satisfaction(route_time: float) -> String:
+	if _selected_orders.is_empty():
+		return "Bad"
+
+	var on_time_orders := 0
+	var late_orders := 0
+	for order in _selected_orders:
+		if order is Dictionary:
+			var order_data: Dictionary = order as Dictionary
+			var max_delivery_time := float(order_data.get("max_delivery_time", 0))
+			if route_time <= max_delivery_time:
+				on_time_orders += 1
+			elif route_time <= max_delivery_time * 1.25:
+				late_orders += 1
+
+	if on_time_orders == _selected_orders.size():
+		return "Great"
+	if on_time_orders + late_orders > 0:
+		return "Good"
+	return "Bad"
