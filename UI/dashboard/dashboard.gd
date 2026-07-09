@@ -1,32 +1,26 @@
 extends Control
-## Minimal clock dashboard. Communicates only with SimulationTime.
+## Minimal player dashboard for the first playable slice.
 
 @onready var _day_label: Label = %DayValue
 @onready var _month_label: Label = %MonthValue
 @onready var _year_label: Label = %YearValue
-@onready var _play_button: Button = %PlayButton
-@onready var _pause_button: Button = %PauseButton
-@onready var _speed_x1_button: Button = %SpeedX1
-@onready var _speed_x2_button: Button = %SpeedX2
-@onready var _speed_x5_button: Button = %SpeedX5
+@onready var _cash_label: Label = %CashValue
+@onready var _house_label: Label = %HouseValue
+@onready var _car_label: Label = %CarValue
+@onready var _next_day_button: Button = %NextDayButton
 
 
 func _ready() -> void:
-	_connect_simulation_time()
+	_connect_signals()
 	_refresh_date()
-	_refresh_controls()
+	_refresh_player()
 
 
-func _connect_simulation_time() -> void:
+func _connect_signals() -> void:
 	SimulationTime.day_advanced.connect(_on_day_advanced)
 	SimulationTime.month_advanced.connect(_on_month_advanced)
-	SimulationTime.simulation_paused.connect(_on_pause_changed)
-
-	_play_button.pressed.connect(_on_play_pressed)
-	_pause_button.pressed.connect(_on_pause_pressed)
-	_speed_x1_button.pressed.connect(_on_speed_pressed.bind(SimulationTime.Speed.X1))
-	_speed_x2_button.pressed.connect(_on_speed_pressed.bind(SimulationTime.Speed.X2))
-	_speed_x5_button.pressed.connect(_on_speed_pressed.bind(SimulationTime.Speed.X5))
+	Player.changed.connect(_on_player_changed)
+	_next_day_button.pressed.connect(_on_next_day_pressed)
 
 
 func _on_day_advanced(_day: int, _month: int, _year: int) -> void:
@@ -38,23 +32,12 @@ func _on_month_advanced(_month: int, _year: int) -> void:
 	call_deferred("_refresh_date")
 
 
-func _on_pause_changed(_is_paused: bool) -> void:
-	_refresh_controls()
+func _on_player_changed() -> void:
+	_refresh_player()
 
 
-func _on_play_pressed() -> void:
-	if not SimulationTime.is_running():
-		SimulationTime.start()
-	SimulationTime.set_paused(false)
-
-
-func _on_pause_pressed() -> void:
-	SimulationTime.set_paused(true)
-
-
-func _on_speed_pressed(speed: SimulationTime.Speed) -> void:
-	SimulationTime.set_speed(speed)
-	_refresh_controls()
+func _on_next_day_pressed() -> void:
+	SimulationTime.advance_day()
 
 
 func _refresh_date() -> void:
@@ -63,12 +46,27 @@ func _refresh_date() -> void:
 	_year_label.text = str(SimulationTime.year)
 
 
-func _refresh_controls() -> void:
-	var is_paused := SimulationTime.is_paused()
-	_play_button.disabled = not is_paused
-	_pause_button.disabled = is_paused
+func _refresh_player() -> void:
+	_cash_label.text = _format_cash(Player.cash)
+	_house_label.text = _format_bool(Player.owns_house)
+	_car_label.text = _format_bool(Player.owns_car)
 
-	var speed := SimulationTime.get_speed()
-	_speed_x1_button.disabled = speed == SimulationTime.Speed.X1
-	_speed_x2_button.disabled = speed == SimulationTime.Speed.X2
-	_speed_x5_button.disabled = speed == SimulationTime.Speed.X5
+
+func _format_cash(value: int) -> String:
+	var sign := ""
+	if value < 0:
+		sign = "-"
+
+	var digits := str(abs(value))
+	var groups := ""
+	while digits.length() > 3:
+		groups = "," + digits.substr(digits.length() - 3, 3) + groups
+		digits = digits.substr(0, digits.length() - 3)
+
+	return "€%s%s%s" % [sign, digits, groups]
+
+
+func _format_bool(value: bool) -> String:
+	if value:
+		return "Yes"
+	return "No"

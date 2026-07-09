@@ -1,0 +1,96 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://UI/career_selection/career_selection.gd" id="1_career_selection"]
+
+[node name="CareerSelection" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_career_selection")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "How do you want to restart your life?"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="JobsPanel" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="JobsTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/JobsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Jobs"
+horizontal_alignment = 1
+
+[node name="PizzaDeliveryButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/JobsPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Pizza Delivery"
+
+[node name="SupermarketButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/JobsPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Supermarket"
+
+[node name="GarbageCollectorButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/JobsPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Garbage Collector"
+
+[node name="BusinessesPanel" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="BusinessesTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/BusinessesPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Businesses"
+horizontal_alignment = 1
+
+[node name="LemonadeStandButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/BusinessesPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Lemonade Stand"
+
+[node name="PizzeriaButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/BusinessesPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Pizzeria"

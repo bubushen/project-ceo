@@ -95,17 +95,23 @@ func set_speed(speed: Speed) -> void:
 	_speed = speed
 
 
+## Advances the calendar by exactly one in-game day.
+func advance_day() -> void:
+	_day_elapsed = 0.0
+	_advance_day()
+
+
 func _advance_day() -> void:
+	day += 1
+	if day > DAYS_PER_MONTH:
+		day = 1
+		month += 1
+		if month > MONTHS_PER_YEAR:
+			month = 1
+			year += 1
+
 	day_advanced.emit(day, month, year)
 
-	day += 1
-	if day <= DAYS_PER_MONTH:
+	if day != 1:
 		return
-
-	day = 1
-	month += 1
-	if month > MONTHS_PER_YEAR:
-		month = 1
-		year += 1
-
 	month_advanced.emit(month, year)

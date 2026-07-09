@@ -1,0 +1,150 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://UI/career_details/career_details.gd" id="1_career_details"]
+
+[node name="CareerDetails" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_career_details")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Career"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="DetailsScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="DetailsList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/DetailsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="CategoryGroup" type="VBoxContainer" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="CategoryLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/CategoryGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Category"
+
+[node name="CategoryValue" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/CategoryGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+autowrap_mode = 3
+
+[node name="CapitalGroup" type="VBoxContainer" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="CapitalLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/CapitalGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Required Capital"
+
+[node name="CapitalValue" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/CapitalGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+autowrap_mode = 3
+
+[node name="SkillsGroup" type="VBoxContainer" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="SkillsLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/SkillsGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Required Skills"
+
+[node name="SkillsValue" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/SkillsGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+autowrap_mode = 3
+
+[node name="TimeGroup" type="VBoxContainer" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TimeLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/TimeGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Time Commitment"
+
+[node name="TimeValue" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/TimeGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+autowrap_mode = 3
+
+[node name="ProsGroup" type="VBoxContainer" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="ProsLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/ProsGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Pros"
+
+[node name="ProsValue" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/ProsGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+autowrap_mode = 3
+
+[node name="ConsGroup" type="VBoxContainer" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="ConsLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/ConsGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Cons"
+
+[node name="ConsValue" type="Label" parent="MarginContainer/VBoxContainer/DetailsScroll/DetailsList/ConsGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+autowrap_mode = 3
+
+[node name="ConfirmButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Confirm"

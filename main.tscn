@@ -1,7 +1,35 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=8 format=3]
 
-[ext_resource type="PackedScene" path="res://ui/dashboard/dashboard.tscn" id="1_dashboard"]
+[ext_resource type="PackedScene" path="res://UI/dashboard/dashboard.tscn" id="1_dashboard"]
+[ext_resource type="Script" path="res://main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://UI/opening_screen/opening_screen.tscn" id="2_opening"]
+[ext_resource type="PackedScene" path="res://UI/career_selection/career_selection.tscn" id="3_career_selection"]
+[ext_resource type="PackedScene" path="res://UI/career_details/career_details.tscn" id="4_career_details"]
+[ext_resource type="PackedScene" path="res://UI/pizza_delivery/pizza_delivery.tscn" id="5_pizza_delivery"]
+[ext_resource type="PackedScene" path="res://UI/city_map/city_map.tscn" id="6_city_map"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_main")
 
 [node name="Dashboard" parent="." instance=ExtResource("1_dashboard")]
+unique_name_in_owner = true
+visible = false
+
+[node name="CareerSelection" parent="." instance=ExtResource("3_career_selection")]
+unique_name_in_owner = true
+visible = false
+
+[node name="CareerDetails" parent="." instance=ExtResource("4_career_details")]
+unique_name_in_owner = true
+visible = false
+
+[node name="PizzaDelivery" parent="." instance=ExtResource("5_pizza_delivery")]
+unique_name_in_owner = true
+visible = false
+
+[node name="CityMap" parent="." instance=ExtResource("6_city_map")]
+unique_name_in_owner = true
+visible = false
+
+[node name="OpeningScreen" parent="." instance=ExtResource("2_opening")]
+unique_name_in_owner = true

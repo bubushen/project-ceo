@@ -1,0 +1,357 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://UI/city_map/city_map.gd" id="1_city_map"]
+
+[node name="CityMap" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_city_map")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "City Map"
+horizontal_alignment = 1
+
+[node name="MapFrame" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MapMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/MapFrame"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="MapCanvas" type="Control" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin"]
+custom_minimum_size = Vector2(312, 400)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MapBase" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15, 0.17, 0.18, 1)
+
+[node name="RiverArea" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 252.0
+offset_top = 0.0
+offset_right = 312.0
+offset_bottom = 400.0
+color = Color(0.12, 0.32, 0.44, 1)
+
+[node name="CityCenterArea" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 36.0
+offset_right = 210.0
+offset_bottom = 166.0
+color = Color(0.31, 0.29, 0.25, 1)
+
+[node name="StationArea" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 176.0
+offset_right = 124.0
+offset_bottom = 312.0
+color = Color(0.26, 0.25, 0.3, 1)
+
+[node name="UniversityArea" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 174.0
+offset_top = 156.0
+offset_right = 250.0
+offset_bottom = 282.0
+color = Color(0.24, 0.29, 0.35, 1)
+
+[node name="IndustrialArea" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 178.0
+offset_top = 302.0
+offset_right = 250.0
+offset_bottom = 398.0
+color = Color(0.28, 0.27, 0.25, 1)
+
+[node name="SuburbsArea" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 324.0
+offset_right = 144.0
+offset_bottom = 398.0
+color = Color(0.2, 0.29, 0.23, 1)
+
+[node name="ParkArea" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 106.0
+offset_top = 228.0
+offset_right = 178.0
+offset_bottom = 322.0
+color = Color(0.14, 0.4, 0.2, 1)
+
+[node name="DistrictLabels" type="Control" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CityCenterLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 42.0
+offset_right = 194.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 11
+text = "City Center"
+horizontal_alignment = 1
+
+[node name="StationLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 184.0
+offset_right = 108.0
+offset_bottom = 206.0
+theme_override_font_sizes/font_size = 11
+text = "Station"
+horizontal_alignment = 1
+
+[node name="UniversityLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
+layout_mode = 0
+offset_left = 180.0
+offset_top = 164.0
+offset_right = 246.0
+offset_bottom = 186.0
+theme_override_font_sizes/font_size = 11
+text = "University"
+horizontal_alignment = 1
+
+[node name="IndustrialLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
+layout_mode = 0
+offset_left = 180.0
+offset_top = 310.0
+offset_right = 248.0
+offset_bottom = 332.0
+theme_override_font_sizes/font_size = 11
+text = "Industrial"
+horizontal_alignment = 1
+
+[node name="SuburbsLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 332.0
+offset_right = 120.0
+offset_bottom = 354.0
+theme_override_font_sizes/font_size = 11
+text = "Suburbs"
+horizontal_alignment = 1
+
+[node name="ParkLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 236.0
+offset_right = 168.0
+offset_bottom = 258.0
+theme_override_font_sizes/font_size = 11
+text = "Park"
+horizontal_alignment = 1
+
+[node name="WaterLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
+layout_mode = 0
+offset_left = 252.0
+offset_top = 18.0
+offset_right = 312.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 11
+text = "River"
+horizontal_alignment = 1
+
+[node name="BlockA" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 76.0
+offset_right = 138.0
+offset_bottom = 112.0
+color = Color(0.43, 0.4, 0.35, 1)
+
+[node name="BlockB" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 160.0
+offset_top = 84.0
+offset_right = 196.0
+offset_bottom = 126.0
+color = Color(0.43, 0.4, 0.35, 1)
+
+[node name="BlockC" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 224.0
+offset_right = 66.0
+offset_bottom = 264.0
+color = Color(0.37, 0.36, 0.43, 1)
+
+[node name="BlockD" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 232.0
+offset_right = 112.0
+offset_bottom = 278.0
+color = Color(0.37, 0.36, 0.43, 1)
+
+[node name="BlockE" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 198.0
+offset_right = 222.0
+offset_bottom = 238.0
+color = Color(0.35, 0.43, 0.5, 1)
+
+[node name="BlockF" type="ColorRect" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 196.0
+offset_top = 344.0
+offset_right = 232.0
+offset_bottom = 390.0
+color = Color(0.42, 0.4, 0.35, 1)
+
+[node name="DistrictSeparatorNorth" type="Line2D" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+points = PackedVector2Array(88, 166, 250, 156)
+width = 2.0
+default_color = Color(0.62, 0.62, 0.58, 0.65)
+
+[node name="DistrictSeparatorSouth" type="Line2D" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+points = PackedVector2Array(24, 334, 250, 302)
+width = 2.0
+default_color = Color(0.62, 0.62, 0.58, 0.65)
+
+[node name="RoadLayer" type="Control" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RouteLine" type="Line2D" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+unique_name_in_owner = true
+width = 4.0
+default_color = Color(0.35, 0.75, 1, 1)
+
+[node name="PizzeriaMarker" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 54.0
+offset_right = 104.0
+offset_bottom = 84.0
+theme_override_font_sizes/font_size = 14
+text = "Pizzeria"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TrafficLightMarker" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 196.0
+offset_right = 174.0
+offset_bottom = 224.0
+theme_override_font_sizes/font_size = 14
+text = "TL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AccidentMarker" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+layout_mode = 0
+offset_left = 218.0
+offset_top = 144.0
+offset_right = 286.0
+offset_bottom = 174.0
+theme_override_font_sizes/font_size = 14
+text = "Accident"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NodeLayer" type="Control" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OrderMarkerLayer" type="Control" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Legend" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Traffic: green low, yellow medium, red high"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RoutePanel" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RouteValue" type="Label" parent="MarginContainer/VBoxContainer/RoutePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Route: Pizzeria -> Customer"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RouteButtons" type="HBoxContainer" parent="MarginContainer/VBoxContainer/RoutePanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ClearRouteButton" type="Button" parent="MarginContainer/VBoxContainer/RoutePanel/RouteButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 44)
+layout_mode = 2
+text = "Clear Route"
+
+[node name="ConfirmRouteButton" type="Button" parent="MarginContainer/VBoxContainer/RoutePanel/RouteButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 44)
+layout_mode = 2
+text = "Confirm Route"
