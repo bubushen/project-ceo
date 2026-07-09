@@ -6,6 +6,7 @@ const GRID_ROWS := 10
 const GRID_ORIGIN := Vector2(24, 36)
 const GRID_SPACING := Vector2(29, 34)
 const PIZZERIA_POSITION := Vector2(52, 70)
+const START_NODE_ID := "Node 2-2"
 
 const TRAFFIC_LOW := Color(0.12, 0.75, 0.26, 1.0)
 const TRAFFIC_MEDIUM := Color(0.95, 0.78, 0.16, 1.0)
@@ -30,12 +31,11 @@ const CUSTOMER_LOCATIONS := {
 
 var _node_buttons: Dictionary = {}
 var _node_positions: Dictionary = {}
+var _node_adjacency: Dictionary = {}
 var _selected_route_nodes: Array[String] = []
-var _active_customer_position := Vector2.ZERO
 
 
 func _ready() -> void:
-	_active_customer_position = CUSTOMER_LOCATIONS["City Center"]
 	_build_road_network()
 	_build_node_grid()
 	_clear_route_button.pressed.connect(_on_clear_route_pressed)
@@ -57,11 +57,13 @@ func _build_road_network() -> void:
 		for x in range(GRID_COLUMNS - 1):
 			if _has_horizontal_road(x, y):
 				_add_road_segment(_node_position(x, y), _node_position(x + 1, y), _traffic_color(x, y))
+				_add_road_connection(_node_id(x, y), _node_id(x + 1, y))
 
 	for y in range(GRID_ROWS - 1):
 		for x in range(GRID_COLUMNS):
 			if _has_vertical_road(x, y):
 				_add_road_segment(_node_position(x, y), _node_position(x, y + 1), _traffic_color(x, y))
+				_add_road_connection(_node_id(x, y), _node_id(x, y + 1))
 
 
 func _build_node_grid() -> void:
@@ -85,6 +87,16 @@ func _add_road_segment(start: Vector2, end: Vector2, color: Color) -> void:
 	road.width = 5.0
 	road.default_color = color
 	_road_layer.add_child(road)
+
+
+func _add_road_connection(from_node: String, to_node: String) -> void:
+	if not _node_adjacency.has(from_node):
+		_node_adjacency[from_node] = []
+	if not _node_adjacency.has(to_node):
+		_node_adjacency[to_node] = []
+
+	_node_adjacency[from_node].append(to_node)
+	_node_adjacency[to_node].append(from_node)
 
 
 func _has_horizontal_road(x: int, y: int) -> bool:
@@ -127,8 +139,6 @@ func _add_order_marker(order: Dictionary, district_counts: Dictionary) -> void:
 
 	var marker_count := int(district_counts.get(district, 0))
 	district_counts[district] = marker_count + 1
-	if district_counts.size() == 1 and marker_count == 0:
-		_active_customer_position = CUSTOMER_LOCATIONS[district]
 
 	var marker := Label.new()
 	marker.text = "Order %d" % int(order.get("number", 0))
@@ -145,11 +155,22 @@ func _add_order_marker(order: Dictionary, district_counts: Dictionary) -> void:
 func _on_intersection_pressed(node_id: String) -> void:
 	if _selected_route_nodes.has(node_id):
 		return
+	if not _can_select_node(node_id):
+		return
 
 	_selected_route_nodes.append(node_id)
 	_highlight_node(node_id, true)
 	_refresh_route_display()
 	_refresh_route_line()
+
+
+func _can_select_node(node_id: String) -> bool:
+	if _selected_route_nodes.is_empty():
+		return node_id == START_NODE_ID
+
+	var previous_node: String = _selected_route_nodes.back()
+	var connected_nodes: Array = _node_adjacency.get(previous_node, [])
+	return connected_nodes.has(node_id)
 
 
 func _on_clear_route_pressed() -> void:
@@ -182,7 +203,6 @@ func _refresh_route_line() -> void:
 	for node_id in _selected_route_nodes:
 		var node_position: Vector2 = _node_positions[node_id]
 		points.append(node_position)
-	points.append(_active_customer_position)
 	_route_line.points = points
 
 
