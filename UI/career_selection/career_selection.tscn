@@ -57,6 +57,13 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Pizza Delivery"
 
+[node name="PizzaDeliveryReasonLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/JobsPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Requires a car"
+horizontal_alignment = 1
+visible = false
+
 [node name="SupermarketButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/JobsPanel"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 52)
