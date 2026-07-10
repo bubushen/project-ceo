@@ -62,7 +62,7 @@ text = "0"
 
 [node name="BasePayLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
 layout_mode = 2
-text = "Base pay total"
+text = "Base pay"
 
 [node name="BasePayValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
 unique_name_in_owner = true
@@ -71,7 +71,7 @@ text = "€0"
 
 [node name="TipTotalLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
 layout_mode = 2
-text = "Tip total"
+text = "Tips"
 
 [node name="TipTotalValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
 unique_name_in_owner = true
@@ -89,7 +89,7 @@ text = "€0"
 
 [node name="RouteTimeLabel" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
 layout_mode = 2
-text = "Estimated route time"
+text = "Route time"
 
 [node name="RouteTimeValue" type="Label" parent="MarginContainer/VBoxContainer/ResultPanel/ResultMargin/ResultGrid"]
 unique_name_in_owner = true

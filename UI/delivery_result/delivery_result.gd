@@ -19,9 +19,9 @@ func show_result(result: Dictionary) -> void:
 
 
 func _format_cash(value: int) -> String:
-	var sign := ""
+	var sign_text := ""
 	if value < 0:
-		sign = "-"
+		sign_text = "-"
 
 	var digits := str(abs(value))
 	var groups := ""
@@ -29,4 +29,4 @@ func _format_cash(value: int) -> String:
 		groups = "," + digits.substr(digits.length() - 3, 3) + groups
 		digits = digits.substr(0, digits.length() - 3)
 
-	return "€%s%s%s" % [sign, digits, groups]
+	return "€%s%s%s" % [sign_text, digits, groups]

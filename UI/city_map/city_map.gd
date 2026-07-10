@@ -20,6 +20,8 @@ const TRAFFIC_MEDIUM := Color(0.95, 0.78, 0.16, 1.0)
 const TRAFFIC_HIGH := Color(0.9, 0.18, 0.14, 1.0)
 const NODE_NORMAL := Color.WHITE
 const NODE_SELECTED := Color(0.35, 0.75, 1.0, 1.0)
+const NODE_AVAILABLE := Color(0.45, 1.0, 0.55, 1.0)
+const NODE_FADED := Color(0.55, 0.55, 0.55, 0.75)
 
 const CUSTOMER_LOCATIONS := {
 	"City Center": Vector2(140, 110),
@@ -51,6 +53,8 @@ func _ready() -> void:
 	_clear_route_button.pressed.connect(_on_clear_route_pressed)
 	_confirm_route_button.pressed.connect(_on_confirm_route_pressed)
 	_refresh_route_display()
+	_refresh_route_controls()
+	_refresh_node_highlights()
 
 
 func show_orders(selected_orders: Array) -> void:
@@ -189,9 +193,10 @@ func _on_intersection_pressed(node_id: String) -> void:
 		return
 
 	_selected_route_nodes.append(node_id)
-	_highlight_node(node_id, true)
+	_refresh_node_highlights()
 	_refresh_route_display()
 	_refresh_route_line()
+	_refresh_route_controls()
 
 
 func _can_select_node(node_id: String) -> bool:
@@ -208,7 +213,7 @@ func _on_clear_route_pressed() -> void:
 
 
 func _on_confirm_route_pressed() -> void:
-	if _selected_route_nodes.is_empty() or _selected_orders.is_empty():
+	if not _can_confirm_route():
 		return
 
 	var result: Dictionary = _calculate_delivery_result()
@@ -218,19 +223,38 @@ func _on_confirm_route_pressed() -> void:
 
 func _clear_route() -> void:
 	_selected_route_nodes.clear()
-	for node_id in _node_buttons:
-		_highlight_node(node_id, false)
-
 	_route_line.clear_points()
 	_refresh_route_display()
+	_refresh_route_controls()
+	_refresh_node_highlights()
 
 
-func _highlight_node(node_id: String, is_selected: bool) -> void:
+func _set_node_state(node_id: String, state_color: Color) -> void:
 	var button := _node_buttons[node_id] as Button
-	if is_selected:
-		button.modulate = NODE_SELECTED
-	else:
-		button.modulate = NODE_NORMAL
+	button.modulate = state_color
+
+
+func _refresh_node_highlights() -> void:
+	var valid_next_nodes: Array = _valid_next_nodes()
+	for node_id in _node_buttons:
+		var node_id_string: String = str(node_id)
+		if _selected_route_nodes.has(node_id_string):
+			_set_node_state(node_id_string, NODE_SELECTED)
+		elif valid_next_nodes.has(node_id_string):
+			_set_node_state(node_id_string, NODE_AVAILABLE)
+		elif _selected_route_nodes.is_empty():
+			_set_node_state(node_id_string, NODE_NORMAL)
+		else:
+			_set_node_state(node_id_string, NODE_FADED)
+
+
+func _valid_next_nodes() -> Array:
+	if _selected_route_nodes.is_empty():
+		return [START_NODE_ID]
+
+	var previous_node: String = _selected_route_nodes.back()
+	var connected_nodes: Array = _node_adjacency.get(previous_node, [])
+	return connected_nodes
 
 
 func _refresh_route_line() -> void:
@@ -250,7 +274,18 @@ func _refresh_route_display() -> void:
 	for node_id in _selected_route_nodes:
 		route_text += " -> " + node_id
 
-	_route_label.text = route_text + " -> Customer"
+	_route_label.text = "%s -> Customer\nEstimated time: %.1f minutes" % [
+		route_text,
+		_calculate_route_time(),
+	]
+
+
+func _refresh_route_controls() -> void:
+	_confirm_route_button.disabled = not _can_confirm_route()
+
+
+func _can_confirm_route() -> bool:
+	return _selected_route_nodes.size() >= 2 and not _selected_orders.is_empty()
 
 
 func _calculate_delivery_result() -> Dictionary:
