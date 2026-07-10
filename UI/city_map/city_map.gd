@@ -3,11 +3,11 @@ extends Control
 
 signal delivery_completed(result: Dictionary)
 
-const GRID_COLUMNS := 10
-const GRID_ROWS := 10
-const GRID_ORIGIN := Vector2(24, 36)
-const GRID_SPACING := Vector2(29, 34)
-const PIZZERIA_POSITION := Vector2(52, 70)
+const GRID_COLUMNS := 8
+const GRID_ROWS := 12
+const GRID_ORIGIN := Vector2(24, 28)
+const GRID_SPACING := Vector2(38, 31)
+const PIZZERIA_POSITION := Vector2(62, 59)
 const START_NODE_ID := "Node 2-2"
 const BASE_PAY_PER_ORDER := 6
 const BASE_SEGMENT_TIME := 4.0
@@ -15,28 +15,33 @@ const TRAFFIC_LOW_MULTIPLIER := 1.0
 const TRAFFIC_MEDIUM_MULTIPLIER := 1.5
 const TRAFFIC_HIGH_MULTIPLIER := 2.0
 
-const TRAFFIC_LOW := Color(0.12, 0.75, 0.26, 1.0)
-const TRAFFIC_MEDIUM := Color(0.95, 0.78, 0.16, 1.0)
-const TRAFFIC_HIGH := Color(0.9, 0.18, 0.14, 1.0)
-const NODE_NORMAL := Color.WHITE
-const NODE_SELECTED := Color(0.35, 0.75, 1.0, 1.0)
-const NODE_AVAILABLE := Color(0.45, 1.0, 0.55, 1.0)
-const NODE_FADED := Color(0.55, 0.55, 0.55, 0.75)
-
-const CUSTOMER_LOCATIONS := {
-	"City Center": Vector2(140, 110),
-	"Station": Vector2(54, 210),
-	"University": Vector2(226, 176),
-	"Industrial Area": Vector2(226, 310),
-	"Suburbs": Vector2(82, 344),
-}
+const TRAFFIC_LOW := Color(0.18, 0.62, 0.26, 0.72)
+const TRAFFIC_MEDIUM := Color(0.86, 0.7, 0.18, 0.72)
+const TRAFFIC_HIGH := Color(0.78, 0.2, 0.16, 0.74)
+const NODE_NORMAL := Color(0.03, 0.04, 0.05, 1.0)
+const NODE_SELECTED := Color(0.28, 0.88, 1.0, 1.0)
+const NODE_AVAILABLE := Color(0.38, 0.86, 0.5, 1.0)
+const NODE_START := Color(0.08, 0.38, 1.0, 1.0)
+const NODE_OBJECTIVE := Color(1.0, 0.58, 0.02, 1.0)
+const NODE_DELIVERED := Color(0.18, 1.0, 0.38, 1.0)
+const NODE_FADED := Color(0.05, 0.06, 0.07, 1.0)
+const NODE_OUTLINE := Color(0.86, 0.9, 0.92, 1.0)
+const NODE_TEXT := Color(0.03, 0.04, 0.05, 1.0)
+const NODE_START_OUTLINE := Color(0.72, 0.9, 1.0, 1.0)
+const NODE_OBJECTIVE_OUTLINE := Color(1.0, 0.96, 0.45, 1.0)
+const NORMAL_NODE_SIZE := Vector2(13, 13)
+const AVAILABLE_NODE_SIZE := Vector2(18, 18)
+const SELECTED_NODE_SIZE := Vector2(20, 20)
+const START_NODE_SIZE := Vector2(28, 28)
+const OBJECTIVE_NODE_SIZE := Vector2(30, 30)
+const DELIVERED_NODE_SIZE := Vector2(28, 28)
 
 const CUSTOMER_DELIVERY_NODES := {
-	"City Center": "Node 5-3",
-	"Station": "Node 2-6",
-	"University": "Node 8-5",
-	"Industrial Area": "Node 8-9",
-	"Suburbs": "Node 3-10",
+	"City Center": "Node 4-4",
+	"Station": "Node 2-7",
+	"University": "Node 6-6",
+	"Industrial Area": "Node 5-10",
+	"Suburbs": "Node 2-11",
 }
 
 @onready var _road_layer: Control = %RoadLayer
@@ -70,12 +75,6 @@ func show_orders(selected_orders: Array) -> void:
 	_clear_order_markers()
 	_clear_route()
 
-	var district_counts: Dictionary = {}
-	for order in selected_orders:
-		if order is Dictionary:
-			var order_data: Dictionary = order as Dictionary
-			_add_order_marker(order_data, district_counts)
-
 
 func _build_road_network() -> void:
 	for y in range(GRID_ROWS):
@@ -99,9 +98,10 @@ func _build_node_grid() -> void:
 			var node_id := _node_id(x, y)
 			var button := Button.new()
 			button.text = ""
-			button.size = Vector2(18, 18)
-			button.custom_minimum_size = Vector2(18, 18)
-			button.position = _node_position(x, y) - Vector2(9, 9)
+			button.flat = true
+			button.focus_mode = Control.FOCUS_NONE
+			button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			_apply_node_visual(button, _node_position(x, y), NORMAL_NODE_SIZE, NODE_NORMAL, 0)
 			button.pressed.connect(_on_intersection_pressed.bind(node_id))
 			_node_layer.add_child(button)
 			_node_buttons[node_id] = button
@@ -111,7 +111,7 @@ func _build_node_grid() -> void:
 func _add_road_segment(start: Vector2, end: Vector2, color: Color) -> void:
 	var road := Line2D.new()
 	road.points = PackedVector2Array([start, end])
-	road.width = 5.0
+	road.width = 4.0
 	road.default_color = color
 	_road_layer.add_child(road)
 
@@ -128,19 +128,19 @@ func _add_road_connection(from_node: String, to_node: String, traffic_multiplier
 
 
 func _has_horizontal_road(x: int, y: int) -> bool:
-	if y in [0, 3, 5, 8]:
+	if y in [0, 3, 5, 8, 10]:
 		return true
-	return x in [1, 4, 7] and not (y in [2, 7])
+	return x in [1, 4, 6] and not (y in [2, 7, 11])
 
 
 func _has_vertical_road(x: int, y: int) -> bool:
-	if x in [1, 4, 7, 9]:
+	if x in [1, 4, 7]:
 		return true
-	return y in [1, 4, 6] and not (x in [0, 8])
+	return y in [1, 4, 6, 9] and x != 0
 
 
 func _traffic_color(x: int, y: int) -> Color:
-	if x in [7, 8] or y == 5:
+	if x == 7 or y in [5, 8]:
 		return TRAFFIC_HIGH
 	if x in [1, 4] or y in [0, 3]:
 		return TRAFFIC_MEDIUM
@@ -171,27 +171,12 @@ func _node_id(x: int, y: int) -> String:
 
 func _clear_order_markers() -> void:
 	for child in _order_marker_layer.get_children():
+		_order_marker_layer.remove_child(child)
 		child.queue_free()
 
 
-func _add_order_marker(order: Dictionary, district_counts: Dictionary) -> void:
-	var district := str(order.get("district", ""))
-	if not CUSTOMER_LOCATIONS.has(district):
-		return
-
-	var marker_count := int(district_counts.get(district, 0))
-	district_counts[district] = marker_count + 1
-
-	var marker := Label.new()
-	marker.text = "Order %d" % int(order.get("number", 0))
-	marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	marker.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	marker.add_theme_font_size_override("font_size", 12)
-	marker.custom_minimum_size = Vector2(66, 26)
-	var base_position: Vector2 = CUSTOMER_LOCATIONS[district]
-	marker.position = base_position + Vector2(marker_count * 18, 0)
-	_order_marker_layer.add_child(marker)
+func _refresh_order_markers() -> void:
+	_clear_order_markers()
 
 
 func _on_intersection_pressed(node_id: String) -> void:
@@ -238,23 +223,77 @@ func _clear_route() -> void:
 	_refresh_node_highlights()
 
 
-func _set_node_state(node_id: String, state_color: Color) -> void:
+func _set_node_state(
+	node_id: String,
+	state_color: Color,
+	node_size: Vector2,
+	z_index: int,
+	label_text := "",
+	border_width := 2,
+	border_color := NODE_OUTLINE
+) -> void:
 	var button := _node_buttons[node_id] as Button
-	button.modulate = state_color
+	button.text = label_text
+	_apply_node_visual(button, _node_positions[node_id], node_size, state_color, z_index, border_width, border_color)
+
+
+func _apply_node_visual(
+	button: Button,
+	center_position: Vector2,
+	node_size: Vector2,
+	fill_color: Color,
+	node_z_index: int,
+	border_width := 2,
+	border_color := NODE_OUTLINE
+) -> void:
+	button.size = node_size
+	button.custom_minimum_size = node_size
+	button.position = center_position - node_size * 0.5
+	button.z_index = node_z_index
+
+	var node_style := StyleBoxFlat.new()
+	node_style.bg_color = fill_color
+	node_style.border_color = border_color
+	node_style.border_width_left = border_width
+	node_style.border_width_top = border_width
+	node_style.border_width_right = border_width
+	node_style.border_width_bottom = border_width
+	var corner_radius := int(node_size.x * 0.5)
+	node_style.corner_radius_top_left = corner_radius
+	node_style.corner_radius_top_right = corner_radius
+	node_style.corner_radius_bottom_right = corner_radius
+	node_style.corner_radius_bottom_left = corner_radius
+	button.add_theme_stylebox_override("normal", node_style)
+	button.add_theme_stylebox_override("hover", node_style)
+	button.add_theme_stylebox_override("pressed", node_style)
+	button.add_theme_stylebox_override("disabled", node_style)
+	button.add_theme_color_override("font_color", NODE_TEXT)
+	button.add_theme_color_override("font_hover_color", NODE_TEXT)
+	button.add_theme_color_override("font_pressed_color", NODE_TEXT)
+	var node_font_size := 8 if button.text.is_empty() else int(max(12.0, node_size.x * 0.42))
+	button.add_theme_font_size_override("font_size", node_font_size)
+	button.modulate = Color.WHITE
 
 
 func _refresh_node_highlights() -> void:
 	var valid_next_nodes: Array = _valid_next_nodes()
 	for node_id in _node_buttons:
 		var node_id_string: String = str(node_id)
-		if _selected_route_nodes.has(node_id_string):
-			_set_node_state(node_id_string, NODE_SELECTED)
+		if _is_delivered_node(node_id_string):
+			_set_node_state(node_id_string, NODE_DELIVERED, DELIVERED_NODE_SIZE, 80, "OK", 3, NODE_OUTLINE)
+		elif node_id_string == START_NODE_ID:
+			_set_node_state(node_id_string, NODE_START, START_NODE_SIZE, 70, "S", 3, NODE_START_OUTLINE)
+		elif _selected_route_nodes.has(node_id_string):
+			_set_node_state(node_id_string, NODE_SELECTED, SELECTED_NODE_SIZE, 50, "", 2, NODE_START_OUTLINE)
+		elif _is_delivery_objective_node(node_id_string):
+			_set_node_state(node_id_string, NODE_OBJECTIVE, OBJECTIVE_NODE_SIZE, 100, "!", 4, NODE_OBJECTIVE_OUTLINE)
 		elif valid_next_nodes.has(node_id_string):
-			_set_node_state(node_id_string, NODE_AVAILABLE)
+			_set_node_state(node_id_string, NODE_AVAILABLE, AVAILABLE_NODE_SIZE, 40, "", 3, NODE_OUTLINE)
 		elif _selected_route_nodes.is_empty():
-			_set_node_state(node_id_string, NODE_NORMAL)
+			_set_node_state(node_id_string, NODE_NORMAL, NORMAL_NODE_SIZE, 0)
 		else:
-			_set_node_state(node_id_string, NODE_FADED)
+			_set_node_state(node_id_string, NODE_FADED, NORMAL_NODE_SIZE, 0)
+	_refresh_order_markers()
 
 
 func _valid_next_nodes() -> Array:
@@ -283,9 +322,10 @@ func _refresh_route_display() -> void:
 	for node_id in _selected_route_nodes:
 		route_text += " -> " + node_id
 
-	_route_label.text = "%s -> Customer\nEstimated time: %.1f minutes" % [
+	_route_label.text = "%s -> Customer\nEstimated time: %.1f minutes\n%s" % [
 		route_text,
 		_calculate_route_time(),
+		_objective_status_text(),
 	]
 	_route_label.text += "\nDelivered districts: %d/%d" % [
 		_delivered_district_count(),
@@ -321,14 +361,29 @@ func _route_reaches_all_delivery_nodes() -> bool:
 
 
 func _delivered_district_count() -> int:
-	var delivered_count := 0
+	return _delivered_districts().size()
+
+
+func _delivered_districts() -> Array:
+	var delivered_districts: Array = []
 	for district in _required_delivery_districts():
 		var district_name: String = str(district)
 		var delivery_node: String = str(CUSTOMER_DELIVERY_NODES[district_name])
 		if _selected_route_nodes.has(delivery_node):
-			delivered_count += 1
+			delivered_districts.append(district_name)
 
-	return delivered_count
+	return delivered_districts
+
+
+func _remaining_districts() -> Array:
+	var remaining_districts: Array = []
+	for district in _required_delivery_districts():
+		var district_name: String = str(district)
+		var delivery_node: String = str(CUSTOMER_DELIVERY_NODES[district_name])
+		if not _selected_route_nodes.has(delivery_node):
+			remaining_districts.append(district_name)
+
+	return remaining_districts
 
 
 func _required_delivery_districts() -> Array:
@@ -343,25 +398,67 @@ func _required_delivery_districts() -> Array:
 	return required_districts
 
 
+func _is_delivery_objective_node(node_id: String) -> bool:
+	for district in _required_delivery_districts():
+		var district_name: String = str(district)
+		if str(CUSTOMER_DELIVERY_NODES[district_name]) == node_id:
+			return true
+
+	return false
+
+
+func _is_delivered_node(node_id: String) -> bool:
+	return _is_delivery_objective_node(node_id) and _selected_route_nodes.has(node_id)
+
+
+func _objective_status_text() -> String:
+	var remaining_districts: Array = _remaining_districts()
+	if remaining_districts.is_empty():
+		return "Reach: None"
+
+	return "Reach: %s" % _join_district_names(remaining_districts)
+
+
+func _join_district_names(districts: Array) -> String:
+	var district_names: Array[String] = []
+	for district in districts:
+		district_names.append(str(district))
+
+	return ", ".join(district_names)
+
+
 func _calculate_delivery_result() -> Dictionary:
 	var route_time := _calculate_route_time()
-	var base_pay_total := _selected_orders.size() * BASE_PAY_PER_ORDER
+	var valid_orders: Array = _valid_selected_orders()
+	var orders_delivered := valid_orders.size()
+	var base_pay_total := orders_delivered * BASE_PAY_PER_ORDER
 	var tip_total := 0
 
-	for order in _selected_orders:
-		if order is Dictionary:
-			var order_data: Dictionary = order as Dictionary
-			tip_total += _calculate_tip(order_data, route_time)
+	for order in valid_orders:
+		var order_data: Dictionary = order as Dictionary
+		tip_total += _calculate_tip(order_data, route_time)
 
 	var total_earned := base_pay_total + tip_total
 	return {
-		"orders_delivered": _selected_orders.size(),
+		"orders_delivered": orders_delivered,
 		"base_pay_total": base_pay_total,
 		"tip_total": tip_total,
 		"total_earned": total_earned,
 		"route_time": route_time,
 		"customer_satisfaction": _customer_satisfaction(route_time),
 	}
+
+
+func _valid_selected_orders() -> Array:
+	var valid_orders: Array = []
+	for order in _selected_orders:
+		if order is Dictionary:
+			var order_data: Dictionary = order as Dictionary
+			var district_name: String = str(order_data.get("district", ""))
+			if CUSTOMER_DELIVERY_NODES.has(district_name):
+				valid_orders.append(order_data)
+
+	return valid_orders
 
 
 func _calculate_route_time() -> float:
@@ -389,21 +486,21 @@ func _calculate_tip(order: Dictionary, route_time: float) -> int:
 
 
 func _customer_satisfaction(route_time: float) -> String:
-	if _selected_orders.is_empty():
+	var valid_orders: Array = _valid_selected_orders()
+	if valid_orders.is_empty():
 		return "Bad"
 
 	var on_time_orders := 0
 	var late_orders := 0
-	for order in _selected_orders:
-		if order is Dictionary:
-			var order_data: Dictionary = order as Dictionary
-			var max_delivery_time := float(order_data.get("max_delivery_time", 0))
-			if route_time <= max_delivery_time:
-				on_time_orders += 1
-			elif route_time <= max_delivery_time * 1.25:
-				late_orders += 1
+	for order in valid_orders:
+		var order_data: Dictionary = order as Dictionary
+		var max_delivery_time := float(order_data.get("max_delivery_time", 0))
+		if route_time <= max_delivery_time:
+			on_time_orders += 1
+		elif route_time <= max_delivery_time * 1.25:
+			late_orders += 1
 
-	if on_time_orders == _selected_orders.size():
+	if on_time_orders == valid_orders.size():
 		return "Great"
 	if on_time_orders + late_orders > 0:
 		return "Good"

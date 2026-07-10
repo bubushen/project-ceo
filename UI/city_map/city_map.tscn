@@ -127,61 +127,67 @@ mouse_filter = 2
 
 [node name="CityCenterLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
 layout_mode = 0
-offset_left = 104.0
-offset_top = 42.0
-offset_right = 194.0
+offset_left = 108.0
+offset_top = 44.0
+offset_right = 198.0
 offset_bottom = 64.0
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.82, 0.84, 0.82, 0.72)
+theme_override_font_sizes/font_size = 9
 text = "City Center"
 horizontal_alignment = 1
 
 [node name="StationLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 184.0
-offset_right = 108.0
-offset_bottom = 206.0
-theme_override_font_sizes/font_size = 11
+offset_left = 38.0
+offset_top = 286.0
+offset_right = 106.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(0.82, 0.84, 0.82, 0.72)
+theme_override_font_sizes/font_size = 9
 text = "Station"
 horizontal_alignment = 1
 
 [node name="UniversityLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
 layout_mode = 0
-offset_left = 180.0
-offset_top = 164.0
-offset_right = 246.0
-offset_bottom = 186.0
-theme_override_font_sizes/font_size = 11
+offset_left = 182.0
+offset_top = 254.0
+offset_right = 248.0
+offset_bottom = 274.0
+theme_override_colors/font_color = Color(0.82, 0.84, 0.82, 0.72)
+theme_override_font_sizes/font_size = 9
 text = "University"
 horizontal_alignment = 1
 
 [node name="IndustrialLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
 layout_mode = 0
-offset_left = 180.0
-offset_top = 310.0
-offset_right = 248.0
-offset_bottom = 332.0
-theme_override_font_sizes/font_size = 11
-text = "Industrial"
+offset_left = 170.0
+offset_top = 374.0
+offset_right = 252.0
+offset_bottom = 394.0
+theme_override_colors/font_color = Color(0.82, 0.84, 0.82, 0.72)
+theme_override_font_sizes/font_size = 9
+text = "Industrial Area"
 horizontal_alignment = 1
 
 [node name="SuburbsLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
 layout_mode = 0
 offset_left = 48.0
-offset_top = 332.0
+offset_top = 374.0
 offset_right = 120.0
-offset_bottom = 354.0
-theme_override_font_sizes/font_size = 11
+offset_bottom = 394.0
+theme_override_colors/font_color = Color(0.82, 0.84, 0.82, 0.72)
+theme_override_font_sizes/font_size = 9
 text = "Suburbs"
 horizontal_alignment = 1
 
 [node name="ParkLabel" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas/DistrictLabels"]
 layout_mode = 0
 offset_left = 116.0
-offset_top = 236.0
+offset_top = 296.0
 offset_right = 168.0
-offset_bottom = 258.0
-theme_override_font_sizes/font_size = 11
+offset_bottom = 316.0
+theme_override_colors/font_color = Color(0.82, 0.84, 0.82, 0.72)
+theme_override_font_sizes/font_size = 9
 text = "Park"
 horizontal_alignment = 1
 
@@ -191,7 +197,8 @@ offset_left = 252.0
 offset_top = 18.0
 offset_right = 312.0
 offset_bottom = 40.0
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.82, 0.84, 0.82, 0.72)
+theme_override_font_sizes/font_size = 9
 text = "River"
 horizontal_alignment = 1
 
@@ -245,13 +252,13 @@ color = Color(0.42, 0.4, 0.35, 1)
 
 [node name="DistrictSeparatorNorth" type="Line2D" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
 points = PackedVector2Array(88, 166, 250, 156)
-width = 2.0
-default_color = Color(0.62, 0.62, 0.58, 0.65)
+width = 1.0
+default_color = Color(0.62, 0.62, 0.58, 0.45)
 
 [node name="DistrictSeparatorSouth" type="Line2D" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
 points = PackedVector2Array(24, 334, 250, 302)
-width = 2.0
-default_color = Color(0.62, 0.62, 0.58, 0.65)
+width = 1.0
+default_color = Color(0.62, 0.62, 0.58, 0.45)
 
 [node name="RoadLayer" type="Control" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
 unique_name_in_owner = true
@@ -265,44 +272,27 @@ mouse_filter = 2
 
 [node name="RouteLine" type="Line2D" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
 unique_name_in_owner = true
-width = 4.0
-default_color = Color(0.35, 0.75, 1, 1)
+z_index = 25
+width = 6.0
+default_color = Color(0.24, 0.9, 1, 1)
 
 [node name="PizzeriaMarker" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
+z_index = 65
 layout_mode = 0
-offset_left = 18.0
-offset_top = 54.0
-offset_right = 104.0
-offset_bottom = 84.0
-theme_override_font_sizes/font_size = 14
-text = "Pizzeria"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TrafficLightMarker" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
-layout_mode = 0
-offset_left = 126.0
-offset_top = 196.0
-offset_right = 174.0
-offset_bottom = 224.0
-theme_override_font_sizes/font_size = 14
-text = "TL"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="AccidentMarker" type="Label" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
-layout_mode = 0
-offset_left = 218.0
-offset_top = 144.0
-offset_right = 286.0
-offset_bottom = 174.0
-theme_override_font_sizes/font_size = 14
-text = "Accident"
+offset_left = 82.0
+offset_top = 42.0
+offset_right = 146.0
+offset_bottom = 62.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.72, 0.86, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "START"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="NodeLayer" type="Control" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
 unique_name_in_owner = true
+z_index = 40
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -312,6 +302,7 @@ grow_vertical = 2
 
 [node name="OrderMarkerLayer" type="Control" parent="MarginContainer/VBoxContainer/MapFrame/MapMargin/MapCanvas"]
 unique_name_in_owner = true
+z_index = 60
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
