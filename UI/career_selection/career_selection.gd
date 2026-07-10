@@ -61,7 +61,9 @@ const CAREERS := {
 @onready var _supermarket_button: Button = %SupermarketButton
 @onready var _garbage_collector_button: Button = %GarbageCollectorButton
 @onready var _lemonade_stand_button: Button = %LemonadeStandButton
+@onready var _lemonade_stand_reason_label: Label = %LemonadeStandReasonLabel
 @onready var _pizzeria_button: Button = %PizzeriaButton
+@onready var _pizzeria_reason_label: Label = %PizzeriaReasonLabel
 
 
 func _ready() -> void:
@@ -88,10 +90,20 @@ func _refresh_career_availability() -> void:
 	_pizza_delivery_button.disabled = not pizza_delivery_available
 	_pizza_delivery_button.modulate = Color.WHITE if pizza_delivery_available else Color(0.65, 0.65, 0.65, 1.0)
 	_pizza_delivery_reason_label.visible = not pizza_delivery_available
+	_set_coming_soon_state(_lemonade_stand_button, _lemonade_stand_reason_label)
+	_set_coming_soon_state(_pizzeria_button, _pizzeria_reason_label)
 
 
 func _is_career_available(career_id: String) -> bool:
 	if career_id == "pizza_delivery":
 		return Player.owns_car
+	if career_id == "lemonade_stand" or career_id == "pizzeria":
+		return false
 
 	return true
+
+
+func _set_coming_soon_state(button: Button, reason_label: Label) -> void:
+	button.disabled = true
+	button.modulate = Color(0.65, 0.65, 0.65, 1.0)
+	reason_label.visible = true

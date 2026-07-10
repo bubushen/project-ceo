@@ -31,6 +31,14 @@ const CUSTOMER_LOCATIONS := {
 	"Suburbs": Vector2(82, 344),
 }
 
+const CUSTOMER_DELIVERY_NODES := {
+	"City Center": "Node 5-3",
+	"Station": "Node 2-6",
+	"University": "Node 8-5",
+	"Industrial Area": "Node 8-9",
+	"Suburbs": "Node 3-10",
+}
+
 @onready var _road_layer: Control = %RoadLayer
 @onready var _route_line: Line2D = %RouteLine
 @onready var _node_layer: Control = %NodeLayer
@@ -279,6 +287,10 @@ func _refresh_route_display() -> void:
 		route_text,
 		_calculate_route_time(),
 	]
+	_route_label.text += "\nDelivered districts: %d/%d" % [
+		_delivered_district_count(),
+		_required_delivery_districts().size(),
+	]
 
 
 func _refresh_route_controls() -> void:
@@ -286,7 +298,49 @@ func _refresh_route_controls() -> void:
 
 
 func _can_confirm_route() -> bool:
-	return _selected_route_nodes.size() >= 2 and not _selected_orders.is_empty() and Player.can_work_shift()
+	return (
+		_selected_route_nodes.size() >= 2
+		and not _selected_orders.is_empty()
+		and Player.can_work_shift()
+		and _route_reaches_all_delivery_nodes()
+	)
+
+
+func _route_reaches_all_delivery_nodes() -> bool:
+	var required_districts: Array = _required_delivery_districts()
+	if required_districts.is_empty():
+		return false
+
+	for district in required_districts:
+		var district_name: String = str(district)
+		var delivery_node: String = str(CUSTOMER_DELIVERY_NODES[district_name])
+		if not _selected_route_nodes.has(delivery_node):
+			return false
+
+	return true
+
+
+func _delivered_district_count() -> int:
+	var delivered_count := 0
+	for district in _required_delivery_districts():
+		var district_name: String = str(district)
+		var delivery_node: String = str(CUSTOMER_DELIVERY_NODES[district_name])
+		if _selected_route_nodes.has(delivery_node):
+			delivered_count += 1
+
+	return delivered_count
+
+
+func _required_delivery_districts() -> Array:
+	var required_districts: Array = []
+	for order in _selected_orders:
+		if order is Dictionary:
+			var order_data: Dictionary = order as Dictionary
+			var district_name: String = str(order_data.get("district", ""))
+			if CUSTOMER_DELIVERY_NODES.has(district_name) and not required_districts.has(district_name):
+				required_districts.append(district_name)
+
+	return required_districts
 
 
 func _calculate_delivery_result() -> Dictionary:

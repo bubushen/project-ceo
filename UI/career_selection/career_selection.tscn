@@ -95,9 +95,23 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Lemonade Stand"
 
+[node name="LemonadeStandReasonLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/BusinessesPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Coming soon"
+horizontal_alignment = 1
+visible = false
+
 [node name="PizzeriaButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/BusinessesPanel"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 52)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Pizzeria"
+
+[node name="PizzeriaReasonLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/BusinessesPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Coming soon"
+horizontal_alignment = 1
+visible = false

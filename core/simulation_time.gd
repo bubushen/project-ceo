@@ -19,7 +19,7 @@ enum Speed {
 	X5 = 5,
 }
 
-## Emitted at the start of each new in-game day, before the calendar increments.
+## Emitted after the calendar advances to the new in-game day.
 ## Payload matches ARCHITECTURE.md: day and month (year included for disambiguation).
 signal day_advanced(day: int, month: int, year: int)
 
