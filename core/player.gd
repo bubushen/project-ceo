@@ -47,10 +47,14 @@ func can_work_shift() -> bool:
 
 
 func consume_shift_energy() -> void:
-	if not can_work_shift():
+	consume_energy(shift_energy_cost)
+
+
+func consume_energy(amount: int) -> void:
+	if energy < amount:
 		return
 
-	energy -= shift_energy_cost
+	energy -= amount
 	changed.emit()
 
 

@@ -10,10 +10,13 @@ signal work_requested
 @onready var _house_label: Label = %HouseValue
 @onready var _car_label: Label = %CarValue
 @onready var _energy_label: Label = %EnergyValue
+@onready var _career_label: Label = %CareerValue
 @onready var _go_to_work_button: Button = %GoToWorkButton
 @onready var _next_day_button: Button = %NextDayButton
 
 var _has_selected_career := false
+var _work_energy_cost := 0
+var _career_name := "None"
 
 
 func _ready() -> void:
@@ -23,9 +26,12 @@ func _ready() -> void:
 	_refresh_work_button()
 
 
-func set_work_available(has_selected_career: bool) -> void:
+func set_work_available(has_selected_career: bool, energy_cost: int = 0, career_name: String = "None") -> void:
 	_has_selected_career = has_selected_career
+	_work_energy_cost = energy_cost
+	_career_name = career_name if has_selected_career else "None"
 	if is_node_ready():
+		_refresh_player()
 		_refresh_work_button()
 
 
@@ -56,7 +62,7 @@ func _on_next_day_pressed() -> void:
 
 
 func _on_go_to_work_pressed() -> void:
-	if not _has_selected_career or not Player.can_work_shift():
+	if not _has_selected_career or Player.energy < _work_energy_cost:
 		return
 
 	work_requested.emit()
@@ -73,11 +79,12 @@ func _refresh_player() -> void:
 	_house_label.text = _format_bool(Player.owns_house)
 	_car_label.text = _format_bool(Player.owns_car)
 	_energy_label.text = "%d / %d" % [Player.energy, Player.max_energy]
+	_career_label.text = "Current career: %s" % _career_name
 
 
 func _refresh_work_button() -> void:
 	_go_to_work_button.visible = _has_selected_career
-	_go_to_work_button.disabled = not Player.can_work_shift()
+	_go_to_work_button.disabled = not _has_selected_career or Player.energy < _work_energy_cost
 
 
 func _format_cash(value: int) -> String:

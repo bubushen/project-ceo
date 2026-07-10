@@ -1,0 +1,114 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://UI/simple_job/simple_job.gd" id="1_simple_job"]
+
+[node name="SimpleJob" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_simple_job")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Work Shift"
+horizontal_alignment = 1
+
+[node name="JobPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="JobMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/JobPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="JobGrid" type="GridContainer" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="JobNameLabel" type="Label" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin/JobGrid"]
+layout_mode = 2
+text = "Job"
+
+[node name="JobNameValue" type="Label" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin/JobGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Job"
+
+[node name="EnergyLabel" type="Label" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin/JobGrid"]
+layout_mode = 2
+text = "Energy"
+
+[node name="EnergyValue" type="Label" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin/JobGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "100 / 100"
+
+[node name="PayLabel" type="Label" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin/JobGrid"]
+layout_mode = 2
+text = "Pay per shift"
+
+[node name="PayValue" type="Label" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin/JobGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "€0"
+
+[node name="EnergyCostLabel" type="Label" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin/JobGrid"]
+layout_mode = 2
+text = "Energy cost"
+
+[node name="EnergyCostValue" type="Label" parent="MarginContainer/VBoxContainer/JobPanel/JobMargin/JobGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="ResultLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartShiftButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Start Shift"
+
+[node name="DashboardButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back to Dashboard"

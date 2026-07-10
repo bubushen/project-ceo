@@ -8,6 +8,7 @@ var _selected_career: Dictionary
 @onready var _pizza_delivery = %PizzaDelivery
 @onready var _city_map = %CityMap
 @onready var _delivery_result = %DeliveryResult
+@onready var _simple_job = %SimpleJob
 @onready var _dashboard = %Dashboard
 
 
@@ -17,6 +18,7 @@ func _ready() -> void:
 	_pizza_delivery.hide()
 	_city_map.hide()
 	_delivery_result.hide()
+	_simple_job.hide()
 	_dashboard.hide()
 	_dashboard.set_work_available(false)
 	_opening_screen.completed.connect(_on_opening_screen_completed)
@@ -26,6 +28,7 @@ func _ready() -> void:
 	_city_map.delivery_completed.connect(_on_delivery_completed)
 	_delivery_result.next_shift_requested.connect(_on_next_shift_requested)
 	_delivery_result.dashboard_requested.connect(_on_dashboard_requested)
+	_simple_job.dashboard_requested.connect(_on_simple_job_dashboard_requested)
 	_dashboard.work_requested.connect(_on_dashboard_work_requested)
 
 
@@ -43,7 +46,7 @@ func _on_career_selected(career: Dictionary) -> void:
 
 func _on_career_confirmed() -> void:
 	_career_details.hide()
-	_dashboard.set_work_available(not _selected_career.is_empty())
+	_refresh_dashboard_work()
 	if _selected_career.get("id", "") == "pizza_delivery":
 		_pizza_delivery.prepare()
 		_pizza_delivery.show()
@@ -72,14 +75,52 @@ func _on_next_shift_requested() -> void:
 
 func _on_dashboard_requested() -> void:
 	_delivery_result.hide()
-	_dashboard.set_work_available(not _selected_career.is_empty())
+	_refresh_dashboard_work()
 	_dashboard.show()
 
 
 func _on_dashboard_work_requested() -> void:
-	if _selected_career.get("id", "") != "pizza_delivery" or not Player.can_work_shift():
+	var career_id := str(_selected_career.get("id", ""))
+	if career_id == "pizza_delivery":
+		if not Player.can_work_shift():
+			return
+
+		_dashboard.hide()
+		_pizza_delivery.prepare()
+		_pizza_delivery.show()
 		return
 
-	_dashboard.hide()
-	_pizza_delivery.prepare()
-	_pizza_delivery.show()
+	if career_id == "supermarket" or career_id == "garbage_collector":
+		_dashboard.hide()
+		_simple_job.show_job(_selected_career)
+		_simple_job.show()
+
+
+func _on_simple_job_dashboard_requested() -> void:
+	_simple_job.hide()
+	_refresh_dashboard_work()
+	_dashboard.show()
+
+
+func _refresh_dashboard_work() -> void:
+	_dashboard.set_work_available(
+		not _selected_career.is_empty(),
+		_selected_career_energy_cost(),
+		_selected_career_name()
+	)
+
+
+func _selected_career_energy_cost() -> int:
+	var career_id := str(_selected_career.get("id", ""))
+	if career_id == "pizza_delivery":
+		return Player.shift_energy_cost
+	if career_id == "supermarket":
+		return 20
+	if career_id == "garbage_collector":
+		return 35
+
+	return 0
+
+
+func _selected_career_name() -> String:
+	return str(_selected_career.get("title", "None"))
