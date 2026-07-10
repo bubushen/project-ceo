@@ -27,6 +27,7 @@ var _selected_order_count := 0
 func _ready() -> void:
 	_random.randomize()
 	_start_shift_button.disabled = true
+	Player.changed.connect(_on_player_changed)
 	_start_shift_button.pressed.connect(_on_start_shift_pressed)
 
 
@@ -40,7 +41,7 @@ func prepare() -> void:
 func _refresh_status() -> void:
 	_day_label.text = str(SimulationTime.day)
 	_cash_label.text = _format_cash(Player.cash)
-	_energy_label.text = "100%"
+	_energy_label.text = "%d / %d" % [Player.energy, Player.max_energy]
 	_skill_label.text = "Beginner"
 
 
@@ -104,14 +105,19 @@ func _refresh_selection_state() -> void:
 		_selected_order_count,
 		MAX_SELECTED_ORDERS,
 	]
-	_start_shift_button.disabled = _selected_order_count == 0
+	_start_shift_button.disabled = _selected_order_count == 0 or not Player.can_work_shift()
 
 
 func _on_start_shift_pressed() -> void:
-	if _selected_order_count == 0:
+	if _selected_order_count == 0 or not Player.can_work_shift():
 		return
 
 	shift_started.emit(_get_selected_orders())
+
+
+func _on_player_changed() -> void:
+	_refresh_status()
+	_refresh_selection_state()
 
 
 func _get_selected_orders() -> Array:

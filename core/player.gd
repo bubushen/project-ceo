@@ -10,6 +10,9 @@ const FUEL_COST_PER_DAY := 6
 var cash: int = 20000
 var owns_house: bool = true
 var owns_car: bool = true
+var max_energy: int = 100
+var energy: int = 100
+var shift_energy_cost: int = 25
 
 
 func _ready() -> void:
@@ -39,10 +42,27 @@ func add_cash(amount: int) -> void:
 	changed.emit()
 
 
+func can_work_shift() -> bool:
+	return energy >= shift_energy_cost
+
+
+func consume_shift_energy() -> void:
+	if not can_work_shift():
+		return
+
+	energy -= shift_energy_cost
+	changed.emit()
+
+
+func reset_energy() -> void:
+	energy = max_energy
+	changed.emit()
+
+
 func _on_day_advanced(_day: int, _month: int, _year: int) -> void:
 	var daily_cost := FOOD_COST_PER_DAY + UTILITIES_COST_PER_DAY
 	if owns_car:
 		daily_cost += FUEL_COST_PER_DAY
 
 	cash -= daily_cost
-	changed.emit()
+	reset_energy()

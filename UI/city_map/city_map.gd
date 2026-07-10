@@ -218,6 +218,7 @@ func _on_confirm_route_pressed() -> void:
 
 	var result: Dictionary = _calculate_delivery_result()
 	Player.add_cash(int(result["total_earned"]))
+	Player.consume_shift_energy()
 	delivery_completed.emit(result)
 
 
@@ -285,7 +286,7 @@ func _refresh_route_controls() -> void:
 
 
 func _can_confirm_route() -> bool:
-	return _selected_route_nodes.size() >= 2 and not _selected_orders.is_empty()
+	return _selected_route_nodes.size() >= 2 and not _selected_orders.is_empty() and Player.can_work_shift()
 
 
 func _calculate_delivery_result() -> Dictionary:

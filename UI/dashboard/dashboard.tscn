@@ -115,47 +115,58 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/h_separation = 14
 theme_override_constants/v_separation = 6
-columns = 3
+columns = 2
 
 [node name="CashHeader" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
 layout_mode = 2
 text = "Cash"
-horizontal_alignment = 1
-
-[node name="HouseHeader" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
-layout_mode = 2
-text = "House"
-horizontal_alignment = 1
-
-[node name="CarHeader" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
-layout_mode = 2
-text = "Car"
-horizontal_alignment = 1
 
 [node name="CashValue" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "€20,000"
-horizontal_alignment = 1
+
+[node name="HouseHeader" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
+layout_mode = 2
+text = "House"
 
 [node name="HouseValue" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "Yes"
-horizontal_alignment = 1
+
+[node name="CarHeader" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
+layout_mode = 2
+text = "Car"
 
 [node name="CarValue" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "Yes"
-horizontal_alignment = 1
+
+[node name="EnergyHeader" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
+layout_mode = 2
+text = "Energy"
+
+[node name="EnergyValue" type="Label" parent="MarginContainer/VBoxContainer/PlayerPanel/PlayerMargin/PlayerVBox/PlayerGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "100 / 100"
 
 [node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="GoToWorkButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Go to Work"
 
 [node name="NextDayButton" type="Button" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
